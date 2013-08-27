@@ -13,3 +13,6 @@ Note: This version relies on Ooyala's PHP SDK for the V2 API. It is included her
 
 ### Version History
 0.1.0 - Initial Release
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/morganestes/ooyala-video-downloader/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
