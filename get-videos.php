@@ -49,6 +49,7 @@ $results = $api->get( 'assets', $parameters );
 $assets  = $results->items;
 
 echo count( $assets ) . ' assets in Ooyala.' . "\r\n";
+//get_video_streams();
 get_source_files( $assets );
 
 /**
@@ -70,6 +71,7 @@ function get_source_files( $assets ) {
 		// Throw in a little random pause so we don't flood the server with requests.
 		sleep( rand( 2, 7 ) );
 
+		if ( 'video' == $asset->asset_type ) {
 		/**@var array $source_file Info about the original file uploaded. */
 		$source_file = $api->get( "assets/$ooyala_embed_code/source_file_info" );
 		//print_r( $source_file );
@@ -83,9 +85,15 @@ function get_source_files( $assets ) {
 			'url' => $file_url,
 			'size' => $file_size,
 		);
-
-		download_files( $file['name'], $file['url'], $file['size'] );
-	}
+		
+		try { 
+			download_files( $file['name'], $file['url'], $file['size'] );
+		} 
+		catch (Exception $e) {
+			throw new Exception( 'Something really gone wrong', 0, $e);  
+		}
+		}
+}
 
 	return $file;
 
