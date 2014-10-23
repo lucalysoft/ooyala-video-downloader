@@ -56,7 +56,8 @@ get_source_files( $assets );
  * Gets the file info about the original files uploaded to Ooyala.
  *
  * @link http://api.ooyala.com/docs/v2/assets#Source+files
- * @param array   $assets
+ *
+ * @param array   $assets The list of all the `asset_type` items in the account.
  * @return array $file Info about the specified file.
  */
 function get_source_files( $assets ) {
@@ -85,19 +86,18 @@ function get_source_files( $assets ) {
 			'url' => $file_url,
 			'size' => $file_size,
 		);
-		
-		try { 
+
+		try {
 			download_files( $file['name'], $file['url'], $file['size'] );
-		} 
-		catch (Exception $e) {
-			throw new Exception( 'Something really gone wrong', 0, $e);  
+		} catch (Exception $e) {
+			throw new Exception( 'Something really gone wrong', 0, $e);
 		}
-		}
+	}
 }
 
-	return $file;
-
 	$assets_time_end = microtime( true );
+
+	return $file;
 }
 
 //$files_to_download = $count;
