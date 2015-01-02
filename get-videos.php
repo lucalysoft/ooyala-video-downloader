@@ -28,7 +28,7 @@
  * This program is not released or approved by Ooyala, Inc.
  */
 require_once 'config.php';
-require_once dirname(__FILE__) . '/api/OoyalaApi.php';
+require_once dirname(__FILE__) . '/sdk/OoyalaApi.php';
 
 $mysqli = $config->db_connect(); // creates $mysqli
 $sql = $mysqli->prepare( "INSERT INTO videos (embed_code, file_name, file_size, url) values(?,?,?,?)" );
