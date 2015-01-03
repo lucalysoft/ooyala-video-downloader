@@ -27,9 +27,14 @@
  * Ooyala is a trademark of Ooyala, Inc.
  * This program is not released or approved by Ooyala, Inc.
  */
+
+/** Includes the {@link $config} object with API credentials. */
 require_once __DIR__ . '/config.php';
+
+/** Include the Ooyala API SDK. */
 require_once __DIR__ . '/sdk/OoyalaApi.php';
 
+/** @var OoyalaApi $api */
 $api = new OoyalaApi($config->api_key, $config->secret_key);
 
 $parameters = array(
@@ -37,10 +42,14 @@ $parameters = array(
     'limit'      => 1000,
 );
 
-/**@var object $results */
+/** @var object $results */
 $results = $api->get('assets', $parameters);
 
-/**@var array $assets The list of all the `asset_type` items in the account. */
+/**
+ * The list of all the `asset_type` items in the account.
+ *
+ * @var array $assets
+ */
 $assets = $results->items;
 
 echo count($assets) . ' assets in Ooyala.' . "\r\n";
@@ -55,22 +64,26 @@ get_source_files($assets);
  * @param array $assets The list of all the `asset_type` items in the account.
  *
  * @return array $file Info about the specified file.
+ * @throws \Exception
  */
 function get_source_files($assets)
 {
     global $api;
-    
+
     foreach ($assets as $asset) {
-        /**@var string $ooyala_embed_code */
+        /** @var string $ooyala_embed_code */
         $ooyala_embed_code = $asset->embed_code;
 
         // Throw in a little random pause so we don't flood the server with requests.
         sleep(rand(2, 7));
 
         if ('video' == $asset->asset_type) {
-            /**@var array $source_file Info about the original file uploaded. */
+            /**
+             * Info about the original file uploaded.
+             *
+             * @var object $source_file
+             */
             $source_file = $api->get("assets/$ooyala_embed_code/source_file_info");
-            //print_r( $source_file );
 
             $file_name = $source_file->original_file_name;
             $file_url  = $source_file->source_file_url;
@@ -85,26 +98,32 @@ function get_source_files($assets)
             try {
                 download_files($file['name'], $file['url'], $file['size']);
             } catch (Exception $e) {
-                throw new Exception('Something really gone wrong', 0, $e);
+                throw new Exception('Unable to download the source file.', 0, $e);
             }
         }
     }
-    
     return $file;
 }
 
+/**
+ * Download the specified file from Ooyala servers.
+ * 
+ * @param string $file_name
+ * @param string $download_url
+ * @param int $file_size
+ * @param string $download_location Optional.
+ */
 function download_files($file_name, $download_url, $file_size, $download_location = 'videos')
 {
     // Create the folder if it doesn't exist.
-    if ( ! is_dir($download_location)) {
+    if (!is_dir($download_location)) {
         mkdir($download_location);
     }
 
     // Sanity checks:
     // Does the file exist? No, keep going. Yes, but it's the wrong size: keep going.
-    if (( ! file_exists("$download_location/$file_name")) ||
-        (file_exists("$download_location/$file_name")
-         && $file_size !== filesize("$download_location/$file_name"))
+    if ((!file_exists("$download_location/$file_name")) ||
+        (file_exists("$download_location/$file_name") && $file_size !== filesize("$download_location/$file_name"))
     ) {
 
         $fp = fopen("$download_location/$file_name", 'w');
@@ -121,6 +140,11 @@ function download_files($file_name, $download_url, $file_size, $download_locatio
     }
 }
 
+/**
+ * Get info about available streams for a specific video.
+ * 
+ * @param $ooyala_embed_code
+ */
 function get_video_streams($ooyala_embed_code)
 {
     global $api;
