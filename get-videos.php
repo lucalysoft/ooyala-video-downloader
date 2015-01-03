@@ -35,15 +35,10 @@ require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/sdk/OoyalaApi.php';
 
 /** @var OoyalaApi $api */
-$api = new OoyalaApi($config->api_key, $config->secret_key);
-
-$parameters = array(
-    'asset_type' => 'video',
-    'limit'      => 1000,
-);
+$api = new OoyalaApi($ovdConfig->api_key, $ovdConfig->secret_key);
 
 /** @var object $results */
-$results = $api->get('assets', $parameters);
+$results = $api->get('assets', $ovdConfig->parameters);
 
 /**
  * The list of all the `asset_type` items in the account.
@@ -107,10 +102,10 @@ function get_source_files($assets)
 
 /**
  * Download the specified file from Ooyala servers.
- * 
+ *
  * @param string $file_name
  * @param string $download_url
- * @param int $file_size
+ * @param int    $file_size
  * @param string $download_location Optional.
  */
 function download_files($file_name, $download_url, $file_size, $download_location = 'videos')
@@ -142,7 +137,7 @@ function download_files($file_name, $download_url, $file_size, $download_locatio
 
 /**
  * Get info about available streams for a specific video.
- * 
+ *
  * @param $ooyala_embed_code
  */
 function get_video_streams($ooyala_embed_code)

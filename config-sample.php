@@ -3,12 +3,18 @@
  * Configuration file for Ooyala Video Downloader.
  */
 
-$config = new Config('api_key', 'secret_key');
+$ovdConfig = new OVD_Config(
+    'api_key',
+    'secret_key',
+    array(
+        'asset_type' => 'video',
+        'limit'      => 1000,
+    ));
 
 /**
- * Class Config
+ * Class OVD_Config
  */
-class Config
+class OVD_Config
 {
     /**
      * API key from your Oolaya account.
@@ -25,14 +31,23 @@ class Config
     public $secret_key;
 
     /**
+     * Additional parameters to pass to initial request.
+     *
+     * @var array
+     */
+    public $parameters = [];
+
+    /**
      * Class constructor.
      *
      * @param string $api_key
      * @param string $secret_key
+     * @param array  $parameters Optional. Additional parameters to pass to initial request.
      */
-    function __construct($api_key, $secret_key)
+    function __construct($api_key, $secret_key, $parameters = [])
     {
         $this->api_key    = $api_key;
         $this->secret_key = $secret_key;
+        array_merge($this->parameters, $parameters);
     }
 }
