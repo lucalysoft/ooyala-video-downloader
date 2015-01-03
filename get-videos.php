@@ -32,8 +32,6 @@ require_once __DIR__ . '/sdk/OoyalaApi.php';
 
 $api = new OoyalaApi($config->api_key, $config->secret_key);
 
-$overall_time_start = microtime(true);
-
 $parameters = array(
     'asset_type' => 'video',
     'limit'      => 1000,
@@ -61,9 +59,7 @@ get_source_files($assets);
 function get_source_files($assets)
 {
     global $api;
-
-    $assets_time_start = microtime(true);
-
+    
     foreach ($assets as $asset) {
         /**@var string $ooyala_embed_code */
         $ooyala_embed_code = $asset->embed_code;
@@ -93,25 +89,9 @@ function get_source_files($assets)
             }
         }
     }
-
-    $assets_time_end = microtime(true);
-
+    
     return $file;
 }
-
-//$files_to_download = $count;
-//echo $files_to_download . ' files to dowload.' . "\r\n";
-
-$overall_time_end = microtime(true);
-
-$assets_time  = $assets_time_end - $assets_time_start;
-$streams_time = $streams_time_end - $streams_time_start;
-$total_time   = $overall_time_end - $overall_time_start;
-
-echo "Assets time: $assets_time" . "\r\n";
-echo "Total time: $total_time" . "\r\n";
-//var_dump( $file );
-
 
 function download_files($file_name, $download_url, $file_size, $download_location = 'videos')
 {
@@ -144,7 +124,6 @@ function download_files($file_name, $download_url, $file_size, $download_locatio
 function get_video_streams()
 {
     global $api;
-    $streams_time_start = microtime(true);
 
     /**@var array $streams All the video collections. */
     $streams = $api->get("assets/$ooyala_embed_code/streams");
@@ -160,9 +139,6 @@ function get_video_streams()
                 'url'        => $stream->url,
             );
             $count ++;
-            //var_dump( $file );
         }
     }
-    $streams_time_end = microtime(true);
-    echo "Streams time: $streams_time" . "\r\n";
 }
