@@ -2,3 +2,5 @@ config.php
 .idea
 downloader.php
 videos
+
+/vendor/

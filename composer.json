@@ -1,0 +1,27 @@
+{
+  "name": "morganestes/ooyala-video-downloader",
+  "description": "Download original videos from your Ooyala account.",
+  "license": "GPL-3.0+",
+  "authors": [
+    {
+      "name": "Morgan Estes",
+      "email": "morgan.estes@gmail.com",
+      "homepage": "http://morganestes.com",
+      "role": "Developer"
+    }
+  ],
+  "support": {
+    "source": "https://github.com/morganestes/ooyala-video-downloader",
+    "issues": "https://github.com/morganestes/ooyala-video-downloader/issues"
+  },
+  "minimum-stability": "beta",
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/ooyala/php-v2-sdk"
+    }
+  ],
+  "require": {
+    "ooyala/v2-api": "1.0.x-dev"
+  }
+}
