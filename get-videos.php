@@ -48,7 +48,7 @@ $results = $api->get('assets', $ovdConfig->parameters);
 $assets = $results->items;
 
 echo count($assets) . ' assets in Ooyala.' . "\r\n";
-//get_video_streams();
+
 get_source_files($assets);
 
 /**
@@ -66,8 +66,8 @@ function get_source_files($assets)
     global $api;
 
     foreach ($assets as $asset) {
-        /** @var string $ooyala_embed_code */
-        $ooyala_embed_code = $asset->embed_code;
+        /** @var string $ooyalaEmbedCode */
+        $ooyalaEmbedCode = $asset->embed_code;
 
         // Throw in a little random pause so we don't flood the server with requests.
         sleep(rand(2, 7));
@@ -76,18 +76,18 @@ function get_source_files($assets)
             /**
              * Info about the original file uploaded.
              *
-             * @var object $source_file
+             * @var object $sourceFile
              */
-            $source_file = $api->get("assets/$ooyala_embed_code/source_file_info");
+            $sourceFile = $api->get("assets/$ooyalaEmbedCode/source_file_info");
 
-            $file_name = $source_file->original_file_name;
-            $file_url  = $source_file->source_file_url;
-            $file_size = $source_file->file_size;
+            $fileName = $sourceFile->original_file_name;
+            $fileUrl  = $sourceFile->source_file_url;
+            $fileSize = $sourceFile->file_size;
 
             $file = array(
-                'name' => $file_name,
-                'url'  => $file_url,
-                'size' => $file_size,
+                'name' => $fileName,
+                'url'  => $fileUrl,
+                'size' => $fileSize,
             );
 
             try {
@@ -103,61 +103,34 @@ function get_source_files($assets)
 /**
  * Download the specified file from Ooyala servers.
  *
- * @param string $file_name
- * @param string $download_url
- * @param int    $file_size
- * @param string $download_location Optional.
+ * @param string $fileName         Name to save the file as.
+ * @param string $downloadUrl      The URL to download the file from.
+ * @param int    $fileSize         The size of the file to download.
+ * @param string $downloadLocation Optional. Folder name to save the downloaded file.
  */
-function download_files($file_name, $download_url, $file_size, $download_location = 'videos')
+function download_files($fileName, $downloadUrl, $fileSize, $downloadLocation = 'videos')
 {
     // Create the folder if it doesn't exist.
-    if (!is_dir($download_location)) {
-        mkdir($download_location);
+    if (!is_dir($downloadLocation)) {
+        mkdir($downloadLocation);
     }
 
     // Sanity checks:
     // Does the file exist? No, keep going. Yes, but it's the wrong size: keep going.
-    if ((!file_exists("$download_location/$file_name")) ||
-        (file_exists("$download_location/$file_name") && $file_size !== filesize("$download_location/$file_name"))
+    if ((!file_exists("$downloadLocation/$fileName")) ||
+        (file_exists("$downloadLocation/$fileName") && $fileSize !== filesize("$downloadLocation/$fileName"))
     ) {
 
-        $fp = fopen("$download_location/$file_name", 'w');
+        $fp = fopen("$downloadLocation/$fileName", 'w');
 
-        echo "Downloading $file_name from $download_url and saving to $download_location.";
-        $ch = curl_init($download_url);
+        echo "Downloading $fileName from $downloadUrl and saving to $downloadLocation.";
+        $ch = curl_init($downloadUrl);
         curl_setopt($ch, CURLOPT_FILE, $fp);
 
         $data = curl_exec($ch);
         curl_close($ch);
         fclose($fp);
     } else {
-        echo "$file_name already exists and will be skipped.\n";
-    }
-}
-
-/**
- * Get info about available streams for a specific video.
- *
- * @param $ooyala_embed_code
- */
-function get_video_streams($ooyala_embed_code)
-{
-    global $api;
-
-    /**@var array $streams All the video collections. */
-    $streams = $api->get("assets/$ooyala_embed_code/streams");
-
-    $count = 0;
-
-    foreach ($streams as $stream) {
-        if ($stream->is_source) {
-            $file = array(
-                'embed_code' => $ooyala_embed_code,
-                'file_name'  => $stream->file_name,
-                'file_size'  => $stream->file_size,
-                'url'        => $stream->url,
-            );
-            $count ++;
-        }
+        echo "$fileName already exists and will be skipped.\n";
     }
 }
