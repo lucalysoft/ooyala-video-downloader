@@ -121,7 +121,7 @@ function download_files($file_name, $download_url, $file_size, $download_locatio
     }
 }
 
-function get_video_streams()
+function get_video_streams($ooyala_embed_code)
 {
     global $api;
 
@@ -134,7 +134,7 @@ function get_video_streams()
         if ($stream->is_source) {
             $file = array(
                 'embed_code' => $ooyala_embed_code,
-                'file_name'  => $file_name,
+                'file_name'  => $stream->file_name,
                 'file_size'  => $stream->file_size,
                 'url'        => $stream->url,
             );
