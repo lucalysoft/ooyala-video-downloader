@@ -17,13 +17,10 @@
   "minimum-stability": "dev",
   "repositories": [
     {
-      "type": "git",
-      "url": "https://github.com/ooyala/php-v2-sdk.git"
+      "type": "vcs",
+      "url": "https://github.com/ooyala/php-v2-sdk"
     }
   ],
-  "require": {
-    "ooyala/v2-api": "dev-master"
-  },
   "autoload": {
     "files": ["class.OoyalaDownloader.php"]
   }
