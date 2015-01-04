@@ -22,7 +22,8 @@
     }
   ],
   "require": {
-    "ooyala/v2-api": "@dev"
+    "php": ">=5.4",
+    "ooyala/php-v2-sdk": "~1.0"
   },
   "autoload": {
     "files": ["class.OoyalaDownloader.php"]
