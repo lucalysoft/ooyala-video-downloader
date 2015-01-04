@@ -23,5 +23,8 @@
   ],
   "require": {
     "ooyala/v2-api": "1.0.x-dev"
+  },
+  "autoload": {
+    "files": ["class.OoyalaDownloader.php"]
   }
 }
