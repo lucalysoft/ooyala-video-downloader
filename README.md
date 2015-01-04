@@ -12,6 +12,14 @@ Download the original video files from your account using the Ooyala API.
 
 ## Version History
 
+== 1.0.0 ==
+First Composer-enabled release with a massive rewrite:
+
+- Namespaced classes.
+- Only methods related to retrieving and saving files are left.
+- No more database storage requirements.
+- All configuration takes place in OoyalaApiConfig.
+ 
 == 0.2.0 ==
 - Update the SDK and references to it.
 - Unbundle the SDK and re-add it as a Git submodule.
