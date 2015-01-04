@@ -1,6 +1,2 @@
-config.php
-.idea
-downloader.php
-videos
-
+/videos/
 /vendor/
