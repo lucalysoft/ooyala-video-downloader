@@ -49,7 +49,7 @@ $assets = $results->items;
 
 echo count($assets) . ' assets in Ooyala.' . "\r\n";
 
-get_source_files($assets);
+getSourceFiles($assets);
 
 /**
  * Gets the file info about the original files uploaded to Ooyala.
@@ -61,7 +61,7 @@ get_source_files($assets);
  * @return array $file Info about the specified file.
  * @throws \Exception
  */
-function get_source_files($assets)
+function getSourceFiles($assets)
 {
     global $api;
 
@@ -91,7 +91,7 @@ function get_source_files($assets)
             );
 
             try {
-                download_files($file['name'], $file['url'], $file['size']);
+                downloadFiles($file['url'], $file['size'], $file['name']);
             } catch (Exception $e) {
                 throw new Exception('Unable to download the source file.', 0, $e);
             }
@@ -103,27 +103,27 @@ function get_source_files($assets)
 /**
  * Download the specified file from Ooyala servers.
  *
- * @param string $fileName         Name to save the file as.
- * @param string $downloadUrl      The URL to download the file from.
- * @param int    $fileSize         The size of the file to download.
- * @param string $downloadLocation Optional. Folder name to save the downloaded file.
+ * @param string $downloadUrl   The URL to download the file from.
+ * @param int    $fileSize      The size of the file to download.
+ * @param string $localFileName Name to save the file as.
+ * @param string $localFolder   Optional. Folder name to save the downloaded file.
  */
-function download_files($fileName, $downloadUrl, $fileSize, $downloadLocation = 'videos')
+function downloadFiles($downloadUrl, $fileSize, $localFileName, $localFolder = 'videos')
 {
     // Create the folder if it doesn't exist.
-    if (!is_dir($downloadLocation)) {
-        mkdir($downloadLocation);
+    if (!is_dir($localFolder)) {
+        mkdir($localFolder);
     }
 
     // Sanity checks:
     // Does the file exist? No, keep going. Yes, but it's the wrong size: keep going.
-    if ((!file_exists("$downloadLocation/$fileName")) ||
-        (file_exists("$downloadLocation/$fileName") && $fileSize !== filesize("$downloadLocation/$fileName"))
+    if ((!file_exists("$localFolder/$localFileName")) ||
+        (file_exists("$localFolder/$localFileName") && $fileSize !== filesize("$localFolder/$localFileName"))
     ) {
 
-        $fp = fopen("$downloadLocation/$fileName", 'w');
+        $fp = fopen("$localFolder/$localFileName", 'w');
 
-        echo "Downloading $fileName from $downloadUrl and saving to $downloadLocation.";
+        echo "Downloading $localFileName from $downloadUrl and saving to $localFolder.";
         $ch = curl_init($downloadUrl);
         curl_setopt($ch, CURLOPT_FILE, $fp);
 
@@ -131,6 +131,6 @@ function download_files($fileName, $downloadUrl, $fileSize, $downloadLocation = 
         curl_close($ch);
         fclose($fp);
     } else {
-        echo "$fileName already exists and will be skipped.\n";
+        echo "$localFileName already exists and will be skipped.\n";
     }
 }
