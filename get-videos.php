@@ -58,12 +58,14 @@ getSourceFiles($assets);
  *
  * @param array $assets The list of all the `asset_type` items in the account.
  *
- * @return array $file Info about the specified file.
+ * @return array $files Info about the specified files, keyed to the embed code.
  * @throws \Exception
  */
 function getSourceFiles($assets)
 {
     global $api;
+
+    $files = array();
 
     foreach ($assets as $asset) {
         /** @var string $ooyalaEmbedCode */
@@ -84,12 +86,14 @@ function getSourceFiles($assets)
             $fileUrl  = $sourceFile->source_file_url;
             $fileSize = $sourceFile->file_size;
 
-            $file = array(
+            $files[$ooyalaEmbedCode] = array(
                 'name' => $fileName,
                 'url'  => $fileUrl,
                 'size' => $fileSize,
             );
+        }
 
+        foreach ($files as $file) {
             try {
                 downloadFiles($file['url'], $file['size'], $file['name']);
             } catch (Exception $e) {
@@ -97,7 +101,8 @@ function getSourceFiles($assets)
             }
         }
     }
-    return $file;
+
+    return $files;
 }
 
 /**
@@ -107,6 +112,8 @@ function getSourceFiles($assets)
  * @param int    $fileSize      The size of the file to download.
  * @param string $localFileName Name to save the file as.
  * @param string $localFolder   Optional. Folder name to save the downloaded file.
+ *
+ * @return mixed|null True or result on success or false on failure. Null if file already exists.
  */
 function downloadFiles($downloadUrl, $fileSize, $localFileName, $localFolder = 'videos')
 {
@@ -120,7 +127,6 @@ function downloadFiles($downloadUrl, $fileSize, $localFileName, $localFolder = '
     if ((!file_exists("$localFolder/$localFileName")) ||
         (file_exists("$localFolder/$localFileName") && $fileSize !== filesize("$localFolder/$localFileName"))
     ) {
-
         $fp = fopen("$localFolder/$localFileName", 'w');
 
         echo "Downloading $localFileName from $downloadUrl and saving to $localFolder.";
@@ -130,7 +136,10 @@ function downloadFiles($downloadUrl, $fileSize, $localFileName, $localFolder = '
         $data = curl_exec($ch);
         curl_close($ch);
         fclose($fp);
+
+        return $data;
     } else {
         echo "$localFileName already exists and will be skipped.\n";
+        return null;
     }
 }
