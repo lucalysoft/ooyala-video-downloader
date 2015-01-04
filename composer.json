@@ -22,7 +22,7 @@
     }
   ],
   "require": {
-    "ooyala/v2-api": "*"
+    "ooyala/v2-api": "@dev"
   },
   "autoload": {
     "files": ["class.OoyalaDownloader.php"]
