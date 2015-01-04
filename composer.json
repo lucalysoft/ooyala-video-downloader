@@ -5,7 +5,7 @@
   "authors": [
     {
       "name": "Morgan Estes",
-      "email": "morgan.estes@gmail.com",
+      "email": "morgan.estes+packagist@gmail.com",
       "homepage": "http://morganestes.com",
       "role": "Developer"
     }
@@ -21,6 +21,9 @@
       "url": "https://github.com/ooyala/php-v2-sdk"
     }
   ],
+  "require": {
+    "ooyala/v2-api": "*"
+  },
   "autoload": {
     "files": ["class.OoyalaDownloader.php"]
   }
