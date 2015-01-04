@@ -14,15 +14,15 @@
     "source": "https://github.com/morganestes/ooyala-video-downloader",
     "issues": "https://github.com/morganestes/ooyala-video-downloader/issues"
   },
-  "minimum-stability": "beta",
+  "minimum-stability": "dev",
   "repositories": [
     {
-      "type": "vcs",
-      "url": "https://github.com/ooyala/php-v2-sdk"
+      "type": "git",
+      "url": "https://github.com/ooyala/php-v2-sdk.git"
     }
   ],
   "require": {
-    "ooyala/v2-api": "1.0.x-dev"
+    "ooyala/v2-api": "dev-master"
   },
   "autoload": {
     "files": ["class.OoyalaDownloader.php"]
