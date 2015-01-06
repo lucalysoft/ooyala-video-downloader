@@ -17,8 +17,8 @@
   "minimum-stability": "dev",
   "repositories": [
     {
-      "type": "git",
-      "url": "https://github.com/ooyala/php-v2-sdk.git"
+      "type": "vcs",
+      "url": "https://github.com/ooyala/php-v2-sdk"
     }
   ],
   "require": {
