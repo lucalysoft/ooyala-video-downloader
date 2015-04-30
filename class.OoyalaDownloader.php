@@ -3,7 +3,7 @@
  * Download the original videos from your Ooyala account.
  *
  * @author  Morgan Estes <morgan.estes@gmail.com>
- * @version 1.0.0
+ * @version 1.0.1
  *
  * @uses    OoyalaApi
  * @link    http://api.ooyala.com/docs/v2/assets

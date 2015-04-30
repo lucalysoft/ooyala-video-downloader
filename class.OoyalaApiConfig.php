@@ -53,8 +53,3 @@ class OoyalaApiConfig
         }
     }
 }
-
-OoyalaApiConfig::init(
-    '/* replace with your api_key */',
-    '/* replace with your secret_key */'
-);

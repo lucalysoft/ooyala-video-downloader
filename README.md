@@ -7,10 +7,14 @@ Download the original video files from your account using the Ooyala API.
 ## Instructions
 
 * Clone this repository (including submodules) to a local location.
-* Rename `config-example.php` to `config.php` and edit the settings as needed.
+* Invoke `OoyalaApiConfig::init()`, passing your API and secret keys as parameters.
 * From the command line, run `php get-videos.php`.
 
 ## Version History
+
+== 1.0.1 ==
+- Remove the empty call to `OoyalaApiConfig::init()`.
+- Update documentation to reflect how to set up with your own keys.
 
 == 1.0.0 ==
 First Composer-enabled release with a massive rewrite:
